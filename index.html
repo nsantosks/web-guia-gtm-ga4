@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva Detallada: GA4 y GTM - Gammaliel Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Gammaliel Analytics Blue (Based on logo: Dark Blue, Bright Blue, Light Slate Gray) -->
+    <!-- Application Structure Plan: A single-page, vertical-scrolling application mirroring the guide's three phases. Each step in each phase is now clickable, opening a detailed modal with enriched content from our chat, including explanations, code examples, and critical warnings. This enhances the app from a summary to a comprehensive tutorial. -->
+    <!-- Visualization & Content Choices: 1. Intro (Goal: Inform) -> Icons & Text. 2. Setup (Goal: Guide) -> Interactive HTML/CSS Flowchart -> Interaction: Click-to-reveal detailed modal for each step. Justification: Provides deep, contextual learning. 3. Funnel (Goal: Explore) -> Interactive HTML/CSS Funnel Diagram -> Interaction: Click-to-show detailed modal with event parameters and importance. Justification: Deeper, focused learning. 4. Visualization (Goal: Demonstrate) -> Chart.js Funnel Chart + Explanatory Text -> Justification: Shows the end result and explains how to achieve it in GA4. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            --color-primary: #0d47a1; /* Dark Blue from logo */
+            --color-accent: #2962ff; /* Bright Blue from logo */
+            --color-background: #f8fafc; /* Light Slate Gray */
+            --color-text: #1e293b; /* Dark Slate Text */
+        }
+        .bg-primary { background-color: var(--color-primary); }
+        .bg-accent { background-color: var(--color-accent); }
+        .text-accent { color: var(--color-accent); }
+        .hover\:text-accent:hover { color: var(--color-accent); }
+        .border-accent { border-color: var(--color-accent); }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .funnel-step, .phase-step {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .funnel-step {
+            clip-path: polygon(0 0, 100% 0, 92% 100%, 8% 100%);
+        }
+        .funnel-step:hover, .phase-step:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        .modal-content {
+            transition: transform 0.25s ease;
+        }
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-40 shadow-sm">
+        <nav class="container mx-auto px-6 py-2 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <img src="http://www.gammalielanalytics.com/img/logo-header.png" alt="Gammaliel Analytics Logo" class="h-12 md:h-16 w-auto" onerror="this.style.display='none'"/>
+                <span class="font-bold text-xl text-primary hidden">Gammaliel Analytics</span>
+            </a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#fase1" class="text-slate-600 hover:text-accent transition duration-300">Fase 1: Configuración</a>
+                <a href="#fase2" class="text-slate-600 hover:text-accent transition duration-300">Fase 2: El Funnel</a>
+                <a href="#fase3" class="text-slate-600 hover:text-accent transition duration-300">Fase 3: Visualización</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        
+        <section class="text-center mb-20 pt-8">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">Domina tu Analítica Web</h2>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto">Esta guía interactiva convierte el complejo proceso de configuración de GA4 y GTM en una serie de pasos claros y manejables. Aprende, implementa y empieza a tomar decisiones basadas en datos.</p>
+        </section>
+
+        <section id="fase1" class="mb-20 py-10">
+            <h2 class="text-3xl font-bold text-center mb-2 text-primary">Fase 1: Configuración y Conexión</h2>
+            <p class="text-lg text-slate-600 text-center max-w-3xl mx-auto mb-12">Sigue este flujo para instalar y conectar las herramientas correctamente. Haz clic en cada paso para ver los detalles.</p>
+            
+            <div class="relative">
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-blue-200 -translate-y-1/2 z-0"></div>
+                <div class="relative flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
+                    <div data-step="1" class="phase-step flex-1 text-center flex flex-col items-center bg-white p-4 rounded-lg shadow-md border border-slate-200">
+                        <div class="bg-accent text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold shadow-lg border-4 border-white">1</div>
+                        <h3 class="font-semibold text-lg mt-4 mb-2 text-primary">Crear Cuentas</h3>
+                        <p class="text-sm text-slate-600 px-2">Genera tu contenedor de GTM y tu propiedad de GA4.</p>
+                    </div>
+                    <div data-step="2" class="phase-step flex-1 text-center flex flex-col items-center bg-white p-4 rounded-lg shadow-md border border-slate-200 ml-0 md:ml-4">
+                        <div class="bg-accent text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold shadow-lg border-4 border-white">2</div>
+                        <h3 class="font-semibold text-lg mt-4 mb-2 text-primary">Instalar GTM</h3>
+                        <p class="text-sm text-slate-600 px-2">El único paso que requiere tocar código. ¡Pero solo una vez!</p>
+                    </div>
+                    <div data-step="3" class="phase-step flex-1 text-center flex flex-col items-center bg-white p-4 rounded-lg shadow-md border border-slate-200 ml-0 md:ml-4">
+                        <div class="bg-accent text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold shadow-lg border-4 border-white">3</div>
+                        <h3 class="font-semibold text-lg mt-4 mb-2 text-primary">Crear Etiqueta GA4</h3>
+                        <p class="text-sm text-slate-600 px-2">Conecta GTM con GA4 usando tu ID de Medición.</p>
+                    </div>
+                    <div data-step="4" class="phase-step flex-1 text-center flex flex-col items-center bg-white p-4 rounded-lg shadow-md border border-slate-200 ml-0 md:ml-4">
+                        <div class="bg-accent text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold shadow-lg border-4 border-white">4</div>
+                        <h3 class="font-semibold text-lg mt-4 mb-2 text-primary">Verificar y Publicar</h3>
+                        <p class="text-sm text-slate-600 px-2">Usa la Vista Previa y publica tus cambios para que se activen.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="fase2" class="mb-20 py-10">
+            <h2 class="text-3xl font-bold text-center mb-2 text-primary">Fase 2: El Funnel Interactivo</h2>
+            <p class="text-lg text-slate-600 text-center max-w-3xl mx-auto mb-12">Haz clic en cada etapa del embudo para entender qué evento estándar de GA4 usar y qué información (parámetros) deberías enviar con él.</p>
+            
+            <div class="w-full max-w-md mx-auto flex flex-col items-center space-y-1">
+                <div data-step="view_item_list" class="funnel-step bg-white w-full p-4 text-center rounded-t-lg shadow-md border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-700">1. Ver Lista de Productos</h3>
+                    <p class="text-sm text-slate-500">`view_item_list`</p>
+                </div>
+                <div data-step="select_item" class="funnel-step bg-white w-11/12 p-4 text-center shadow-md border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-700">2. Seleccionar Producto</h3>
+                    <p class="text-sm text-slate-500">`select_item`</p>
+                </div>
+                <div data-step="view_item" class="funnel-step bg-white w-10/12 p-4 text-center shadow-md border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-700">3. Ver Producto</h3>
+                    <p class="text-sm text-slate-500">`view_item`</p>
+                </div>
+                <div data-step="add_to_cart" class="funnel-step bg-white w-9/12 p-4 text-center shadow-md border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-700">4. Añadir al Carrito</h3>
+                    <p class="text-sm text-slate-500">`add_to_cart`</p>
+                </div>
+                 <div data-step="begin_checkout" class="funnel-step bg-white w-8/12 p-4 text-center shadow-md border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-700">5. Iniciar Pago</h3>
+                    <p class="text-sm text-slate-500">`begin_checkout`</p>
+                </div>
+                <div data-step="purchase" class="funnel-step bg-primary text-white w-7/12 p-4 text-center rounded-b-lg shadow-lg">
+                    <h3 class="text-lg font-semibold">6. Compra</h3>
+                    <p class="text-sm text-blue-200">`purchase`</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="fase3" class="py-10">
+            <h2 class="text-3xl font-bold text-center mb-2 text-primary">Fase 3: Visualización del Resultado</h2>
+            <p class="text-lg text-slate-600 text-center max-w-3xl mx-auto mb-12">Una vez implementados los eventos, podrás analizar el rendimiento de tu funnel. Este gráfico es un ejemplo de lo que puedes construir en la sección "Explorar" de GA4 para identificar puntos de fuga.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200/80">
+                    <div class="chart-container">
+                        <canvas id="funnelChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200/80">
+                    <h3 class="font-semibold text-lg mb-3 text-primary">¿Cómo crear este informe en GA4?</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-slate-600">
+                        <li>Ve a la sección <strong>"Explorar"</strong> en el menú de la izquierda.</li>
+                        <li>Selecciona la plantilla <strong>"Exploración del embudo de conversión"</strong>.</li>
+                        <li>En el panel "Configuración de la pestaña", haz clic en el lápiz para editar los <strong>"Pasos"</strong>.</li>
+                        <li>Define cada paso del embudo, asignando el nombre del evento correspondiente (ej: `view_item`, `add_to_cart`, etc.).</li>
+                        <li>Haz clic en "Aplicar". GA4 generará el gráfico visual del funnel.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-white mt-20 border-t border-slate-200">
+        <div class="container mx-auto px-6 py-4 text-center text-slate-500">
+            <p>&copy; 2025 Gammaliel Analytics. Todos los derechos reservados.</p>
+            <p class="text-sm mt-2">Diseñado por: <a href="https://www.linkedin.com/in/ingnsantos/" target="_blank" rel="noopener noreferrer" class="font-semibold text-accent hover:underline">Ing. Nestor Santos</a></p>
+        </div>
+    </footer>
+
+    <div id="detailModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-60 opacity-0 pointer-events-none">
+        <div class="modal-content transform scale-95 bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[90vh]">
+            <div class="p-6 border-b border-slate-200 flex justify-between items-start">
+                <div>
+                    <h3 id="modalTitle" class="text-2xl font-bold text-primary"></h3>
+                    <p id="modalEventName" class="font-mono text-sm bg-slate-100 text-slate-700 inline-block px-2 py-1 rounded-md mt-1"></p>
+                </div>
+                <button id="closeModal" class="text-3xl text-slate-400 hover:text-slate-800 transition leading-none">&times;</button>
+            </div>
+            <div id="modalBody" class="p-6 overflow-y-auto max-h-[calc(90vh-100px)]">
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('detailModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalEventName = document.getElementById('modalEventName');
+            const modalBody = document.getElementById('modalBody');
+
+            const guideData = {
+                '1': {
+                    title: 'Paso 1: Crear Cuentas',
+                    eventName: 'Preparación',
+                    body: `
+                        <p class="mb-4 text-slate-600">El primer paso es tener las dos plataformas listas para trabajar.</p>
+                        <h4 class="font-semibold text-primary mb-2">Google Tag Manager (GTM)</h4>
+                        <ul class="list-disc list-inside space-y-2 text-slate-600 mb-4">
+                            <li>Ve a <strong>tagmanager.google.com</strong>.</li>
+                            <li>Crea una <strong>Cuenta</strong> para tu empresa.</li>
+                            <li>Dentro de la cuenta, crea un <strong>Contenedor</strong> para tu sitio web, seleccionando "Web" como plataforma.</li>
+                        </ul>
+                        <h4 class="font-semibold text-primary mb-2">Google Analytics 4 (GA4)</h4>
+                        <ul class="list-disc list-inside space-y-2 text-slate-600">
+                            <li>Ve a <strong>analytics.google.com</strong>.</li>
+                            <li>Navega a Administrar > Crear Propiedad.</li>
+                            <li>Configura un <strong>Flujo de datos web</strong>. Al finalizar, GA4 te dará un <strong>ID de Medición</strong> (ej: G-XXXXXXXXXX).</li>
+                            <li><strong>Copia este ID</strong>, es la "dirección" a la que GTM enviará los datos.</li>
+                        </ul>
+                    `
+                },
+                '2': {
+                    title: 'Paso 2: Instalar GTM',
+                    eventName: 'Implementación',
+                    body: `
+                        <p class="mb-4 text-slate-600">Este es el único momento en que necesitarás editar el código de tu web. El código de GTM debe estar en <strong>todas las páginas</strong> que quieras medir.</p>
+                        <h4 class="font-semibold text-primary mb-2">Código 1: En el &lt;head&gt;</h4>
+                        <p class="text-slate-600 mb-2">Pega este bloque lo más alto posible dentro de la etiqueta <code>&lt;head&gt;</code> de tu plantilla.</p>
+                        <div class="code-block mb-4">&lt;!-- Google Tag Manager --&gt;<br>&lt;script&gt;(function(w,d,s,l,i){...})&lt;/script&gt;<br>&lt;!-- End Google Tag Manager --&gt;</div>
+                        
+                        <h4 class="font-semibold text-primary mb-2">Código 2: En el &lt;body&gt;</h4>
+                        <p class="text-slate-600 mb-2">Pega este bloque justo después de la etiqueta de apertura <code>&lt;body&gt;</code>.</p>
+                        <div class="code-block mb-4">&lt;!-- Google Tag Manager (noscript) --&gt;<br>&lt;noscript&gt;&lt;iframe src="..."&gt;&lt;/iframe&gt;&lt;/noscript&gt;<br>&lt;!-- End Google Tag Manager (noscript) --&gt;</div>
+                        
+                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg" role="alert">
+                          <p class="font-bold">¡Advertencia Crucial!</p>
+                          <p>La interfaz de Google Analytics te ofrecerá su propio código (gtag.js). <strong>NO instales este código.</strong> Si lo haces, duplicarás la medición y tus datos serán incorrectos. Confía únicamente en el código de Google Tag Manager.</p>
+                        </div>
+                    `
+                },
+                '3': {
+                    title: 'Paso 3: Crear Etiqueta de Configuración GA4',
+                    eventName: 'Conexión',
+                    body: `
+                        <p class="mb-4 text-slate-600">Ahora le diremos a GTM que empiece a enviar datos a GA4. Este es el "puente" entre ambas herramientas.</p>
+                        <ol class="list-decimal list-inside space-y-2 text-slate-600">
+                            <li>En GTM, ve a <strong>Etiquetas > Nueva</strong>.</li>
+                            <li>Nómbrala de forma clara, ej: "GA4 - Configuración".</li>
+                            <li>En "Configuración de la etiqueta", elige <strong>"Google Analytics: Etiqueta de Google"</strong>.</li>
+                            <li>Pega tu <strong>ID de Medición</strong> (G-XXXXXXXXXX) en el campo "ID de etiqueta".</li>
+                            <li>En la sección "Activación", elige el activador <strong>"Initialization - All Pages"</strong>.</li>
+                            <li>Guarda la etiqueta.</li>
+                        </ol>
+                        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mt-4 rounded-r-lg">
+                          <p class="font-bold">Pro Tip</p>
+                          <p>Usar el activador "Initialization" asegura que tu etiqueta de GA4 se dispare antes que cualquier otra etiqueta de evento, garantizando que el seguimiento sea consistente.</p>
+                        </div>
+                    `
+                },
+                '4': {
+                    title: 'Paso 4: Verificar y Publicar',
+                    eventName: 'Activación',
+                    body: `
+                        <p class="mb-4 text-slate-600">Nunca publiques a ciegas. La verificación es clave para evitar errores.</p>
+                        <h4 class="font-semibold text-primary mb-2">1. Verificar con "Vista Previa"</h4>
+                        <p class="text-slate-600 mb-4">En GTM, haz clic en <strong>"Vista Previa"</strong> e introduce la URL de tu web. Se abrirá tu sitio con una insignia de "Tag Assistant". En la ventana de Tag Assistant, debes ver tu etiqueta "GA4 - Configuración" en la sección <strong>"Tags Fired"</strong>. Si es así, ¡funciona!</p>
+                        
+                        <h4 class="font-semibold text-primary mb-2">2. Publicar los Cambios</h4>
+                        <p class="text-slate-600 mb-4">Una vez verificado, vuelve a GTM y haz clic en el botón azul <strong>"Enviar"</strong>. Asígnale un nombre descriptivo a la versión (ej: "Instalación inicial de GA4") y haz clic en <strong>"Publicar"</strong>. Tus cambios ahora están activos para todos los visitantes.</p>
+
+                        <h4 class="font-semibold text-primary mb-2">3. Confirmación Final en GA4</h4>
+                        <p class="text-slate-600">Ve a tu cuenta de GA4, entra en <strong>Informes > Tiempo real</strong>. En unos minutos, deberías ver tu propia visita. ¡Esa es la prueba definitiva!</p>
+                    `
+                },
+                'view_item_list': {
+                    title: 'Ver Lista de Productos',
+                    eventName: 'view_item_list',
+                    body: `<p class="mb-4 text-slate-600">Se activa cuando un usuario ve una lista de productos, como en una página de categoría, en los resultados de una búsqueda o en un carrusel de productos relacionados.</p>
+                           <h5 class="font-semibold text-primary mb-2">¿Por qué es importante?</h5>
+                           <p class="mb-4 text-slate-600">Te ayuda a entender qué listas de productos son más efectivas para generar clics e interés.</p>
+                           <h5 class="font-semibold text-primary mb-2">Parámetros Recomendados</h5>
+                           <div class="code-block">{\n  item_list_name: 'Pantalones de Verano',\n  items: [\n    { item_id: 'SKU_123', item_name: 'Pantalón Chino' },\n    { item_id: 'SKU_456', item_name: 'Pantalón Corto' }\n  ]\n}</div>`
+                },
+                'select_item': {
+                    title: 'Seleccionar Producto',
+                    eventName: 'select_item',
+                    body: `<p class="mb-4 text-slate-600">Se activa cuando un usuario hace clic en un producto específico desde una lista. Es el puente entre ver una lista y ver el detalle.</p>
+                           <h5 class="font-semibold text-primary mb-2">¿Por qué es importante?</h5>
+                           <p class="mb-4 text-slate-600">Mide la tasa de clics (CTR) de tus productos en las listas. ¿Qué imágenes o títulos atraen más la atención?</p>
+                           <h5 class="font-semibold text-primary mb-2">Parámetros Recomendados</h5>
+                           <div class="code-block">{\n  item_list_name: 'Pantalones de Verano',\n  items: [\n    { item_id: 'SKU_123', item_name: 'Pantalón Chino' }\n  ]\n}</div>`
+                },
+                'view_item': {
+                    title: 'Ver Producto',
+                    eventName: 'view_item',
+                    body: `<p class="mb-4 text-slate-600">Se activa cuando un usuario visita la página de detalles de un producto. Es una señal clara de interés.</p>
+                           <h5 class="font-semibold text-primary mb-2">¿Por qué es importante?</h5>
+                           <p class="mb-4 text-slate-600">Es el primer paso real del funnel de compra. Analizar qué productos son más vistos te da pistas sobre tu inventario y marketing.</p>
+                           <h5 class="font-semibold text-primary mb-2">Parámetros Recomendados</h5>
+                           <div class="code-block">{\n  currency: 'USD',\n  value: 29.99,\n  items: [\n    { item_id: 'SKU_123', item_name: 'Pantalón Chino' }\n  ]\n}</div>`
+                },
+                'add_to_cart': {
+                    title: 'Añadir al Carrito',
+                    eventName: 'add_to_cart',
+                    body: `<p class="mb-4 text-slate-600">Se activa cuando un usuario añade uno o más productos a su carrito de compras. Es una fuerte señal de intención de compra.</p>
+                           <h5 class="font-semibold text-primary mb-2">¿Por qué es importante?</h5>
+                           <p class="mb-4 text-slate-600">Te permite calcular la tasa de "vista a carrito". Si muchos ven un producto pero pocos lo añaden, puede haber un problema con el precio, la descripción o la disponibilidad.</p>
+                           <h5 class="font-semibold text-primary mb-2">Parámetros Recomendados</h5>
+                           <div class="code-block">{\n  currency: 'USD',\n  value: 29.99,\n  items: [\n    { item_id: 'SKU_123', item_name: 'Pantalón Chino', quantity: 1 }\n  ]\n}</div>`
+                },
+                'begin_checkout': {
+                    title: 'Iniciar Pago',
+                    eventName: 'begin_checkout',
+                    body: `<p class="mb-4 text-slate-600">Se activa cuando un usuario realiza la primera acción para pagar, como hacer clic en el botón "Finalizar Compra" desde el carrito.</p>
+                           <h5 class="font-semibold text-primary mb-2">¿Por qué es importante?</h5>
+                           <p class="mb-4 text-slate-600">Marca el inicio de la fase final. Un alto abandono después de este punto puede indicar problemas con los gastos de envío, métodos de pago o la complejidad del formulario.</p>
+                           <h5 class="font-semibold text-primary mb-2">Parámetros Recomendados</h5>
+                           <div class="code-block">{\n  currency: 'USD',\n  value: 59.98,\n  coupon: 'SUMMER_SALE',\n  items: [\n    { item_id: 'SKU_123', item_name: 'Pantalón Chino', quantity: 2 }\n  ]\n}</div>`
+                },
+                'purchase': {
+                    title: 'Compra Realizada',
+                    eventName: 'purchase',
+                    body: `<p class="mb-4 text-slate-600">Se activa cuando un usuario completa una transacción. Normalmente en la página de "Gracias por tu compra". <strong>¡Es el evento más importante!</strong></p>
+                           <h5 class="font-semibold text-primary mb-2">¿Por qué es importante?</h5>
+                           <p class="mb-4 text-slate-600">Es el objetivo final de un e-commerce. Mide directamente los ingresos y el éxito de todo el proceso. GA4 usa este evento para calcular la tasa de conversión, el valor de compra promedio y muchos otros KPIs.</p>
+                           <h5 class="font-semibold text-primary mb-2">Parámetros Recomendados</h5>
+                           <div class="code-block">{\n  transaction_id: 'T_12345',\n  value: 64.97,\n  tax: 4.99,\n  shipping: 5.99,\n  currency: 'USD',\n  items: [\n    { item_id: 'SKU_123', item_name: 'Pantalón Chino', quantity: 2 }\n  ]\n}</div>`
+                }
+            };
+
+            const openModal = (stepKey) => {
+                const data = guideData[stepKey];
+                if (!data) return;
+
+                modalTitle.textContent = data.title;
+                modalEventName.textContent = data.eventName;
+                modalBody.innerHTML = data.body;
+                
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.querySelector('.modal-content').classList.remove('scale-95');
+            };
+
+            const closeModal = () => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modal.querySelector('.modal-content').classList.add('scale-95');
+            };
+
+            document.querySelectorAll('[data-step]').forEach(step => {
+                step.addEventListener('click', () => {
+                    const stepKey = step.getAttribute('data-step');
+                    openModal(stepKey);
+                });
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            const ctx = document.getElementById('funnelChart').getContext('2d');
+            const funnelChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Vieron Lista', 'Seleccionaron Producto', 'Vieron Producto', 'Añadieron al Carrito', 'Iniciaron Pago', 'Compraron'],
+                    datasets: [{
+                        label: 'Usuarios en el Funnel',
+                        data: [1000, 750, 600, 300, 250, 100],
+                        backgroundColor: [
+                            'rgba(66, 165, 245, 0.6)',
+                            'rgba(66, 165, 245, 0.6)',
+                            'rgba(29, 128, 228, 0.6)',
+                            'rgba(29, 128, 228, 0.6)',
+                            'rgba(13, 71, 161, 0.6)',
+                            'rgba(13, 71, 161, 0.8)',
+                        ],
+                        borderColor: '#0d47a1',
+                        borderWidth: 1.5,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { display: false, drawBorder: false },
+                            ticks: { color: '#64748b' }
+                        },
+                        y: {
+                            grid: { display: false, drawBorder: false },
+                            ticks: { color: '#334155' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Ejemplo de Tasa de Conversión del Funnel',
+                            font: { size: 16 },
+                            color: '#1e293b',
+                            padding: { bottom: 20 }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
