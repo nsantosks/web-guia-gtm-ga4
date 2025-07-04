@@ -159,6 +159,54 @@
             </div>
         </section>
 
+        <section id="event-reference" class="mb-20 py-10">
+            <h2 class="text-3xl font-bold text-center mb-2 text-primary">Referencia Rápida: Nombres de Eventos Estándar</h2>
+            <p class="text-lg text-slate-600 text-center max-w-3xl mx-auto mb-12">Usar los eventos recomendados por Google es clave para que GA4 genere informes de monetización y de interacción automáticamente.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="text-xl font-bold text-primary mb-4">🛍️ E-commerce</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">view_item_list</code><span class="text-slate-600">Ver una lista de productos.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">select_item</code><span class="text-slate-600">Hacer clic en un producto.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">view_item</code><span class="text-slate-600">Ver la página de un producto.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">add_to_cart</code><span class="text-slate-600">Añadir al carrito.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">remove_from_cart</code><span class="text-slate-600">Quitar del carrito.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">view_cart</code><span class="text-slate-600">Ver el carrito.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">begin_checkout</code><span class="text-slate-600">Iniciar el pago.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">add_shipping_info</code><span class="text-slate-600">Añadir info de envío.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">add_payment_info</code><span class="text-slate-600">Añadir info de pago.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">purchase</code><span class="text-slate-600">Completar una compra.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">refund</code><span class="text-slate-600">Emitir un reembolso.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">add_to_wishlist</code><span class="text-slate-600">Añadir a lista de deseos.</span></li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="text-xl font-bold text-primary mb-4">🧑‍💻 Generación de Leads</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">generate_lead</code><span class="text-slate-600">Enviar un formulario.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">sign_up</code><span class="text-slate-600">Registrarse en la web.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">login</code><span class="text-slate-600">Iniciar sesión.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">share</code><span class="text-slate-600">Compartir contenido.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">form_start</code><span class="text-slate-600">Empezar a rellenar un form.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">form_submit</code><span class="text-slate-600">Enviar un formulario.</span></li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="text-xl font-bold text-primary mb-4">🌐 Generales y Automáticos</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">search</code><span class="text-slate-600">Búsqueda en el sitio.</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">page_view</code><span class="text-slate-600">Vista de página (Auto).</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">scroll</code><span class="text-slate-600">Llegar al 90% (Auto).</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">click</code><span class="text-slate-600">Clic a sitio externo (Auto).</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">file_download</code><span class="text-slate-600">Descarga de archivo (Auto).</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">video_start</code><span class="text-slate-600">Inicio de video (Auto).</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">video_progress</code><span class="text-slate-600">Progreso de video (Auto).</span></li>
+                        <li class="flex items-start"><code class="font-mono text-sm bg-slate-100 px-2 py-1 rounded-md mr-2 text-accent">video_complete</code><span class="text-slate-600">Video completado (Auto).</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
         <section id="fase3" class="py-10">
             <h2 class="text-3xl font-bold text-center mb-2 text-primary">Fase 3: Visualización del Resultado</h2>
             <p class="text-lg text-slate-600 text-center max-w-3xl mx-auto mb-12">Una vez implementados los eventos, podrás analizar el rendimiento de tu funnel. Este gráfico es un ejemplo de lo que puedes construir en la sección "Explorar" de GA4 para identificar puntos de fuga.</p>
